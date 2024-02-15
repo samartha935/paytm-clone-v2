@@ -4,20 +4,22 @@ const { JWT_SECRET } = require("../config")
 function authMiddleware (req, res, next){
 
     const authHeader = req.headers.authorization
+
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(403).json({});
+    if (! (authHeader && authHeader.startsWith('Bearer ')) ) {
+        res.status(403).json({
+            msg : "You dont have the authorization."
+        });
     }
 
-    const token = authHeader.split("")[1]
-
+    const token = authHeader.split(' ')[1]
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET) 
         req.documentId = decoded.documentId
         next()
 
-    }catch(err){
+    } catch(err){
         console.log(err)
         res.status(403).json({});
     }
