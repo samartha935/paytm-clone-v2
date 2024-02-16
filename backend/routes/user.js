@@ -37,11 +37,9 @@ userRouter.post("/signup", async (req, res) => {
     const documentId = user._id;
 
     await Account.create({
-      userId : documentId,
-      balance :  100 + Math.random() * 10000
-    })
-
-
+      userId: documentId,
+      balance: 100 + Math.random() * 10000,
+    });
 
     const token = jwt.sign({ documentId }, JWT_SECRET);
 
@@ -49,7 +47,6 @@ userRouter.post("/signup", async (req, res) => {
       msg: "User created successfully.",
       token: token,
     });
-
   } catch (err) {
     console.log(err);
     res.status(403).json({});
@@ -92,7 +89,7 @@ userRouter.post("/signin", async (req, res) => {
   }
 });
 
-userRouter.post("/update", authMiddleware, async (req, res) => {
+userRouter.put("/update", authMiddleware, async (req, res) => {
   try {
     const payload = req.body;
 
@@ -125,6 +122,29 @@ userRouter.post("/update", authMiddleware, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(403).json({});
+  }
+});
+userRouter.get("/bulk", async (req, res) => {
+  try {
+    const list = await User.find({});
+
+    if (list) {
+      res.json({
+        users: list.map((user) => ({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          _id: user._id,
+        })),
+      });
+    }else{
+      res.json({
+        msg : "There are no users."
+      })
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({});
   }
 });
 
