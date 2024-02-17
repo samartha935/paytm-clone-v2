@@ -29,7 +29,7 @@ userRouter.post("/signup", async (req, res) => {
     });
 
     if (result) {
-      res.status(409).json({
+      return res.status(409).json({
         msg: "This username / email already exists.",
       });
     }
