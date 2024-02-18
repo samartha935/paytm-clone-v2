@@ -30,26 +30,33 @@ export function User() {
     return () => clearInterval(intervalId);
   }, []);
 
- 
-
   return (
     <>
-      <div className="border-2 border-black bg-gray-400">
-        {data ? data.users.map((user) => {
-          return (
-            <div className="border-2 border-black flex justify-between m-4 bg-slate-100" key={user._id}>
-              <div className="p-2">
-                {user.firstName} {user.lastName}  
+      <div className="border-2 border-black bg-gray-400 mx-10">
+        {data ? (
+          data.users.map((user) => {
+            return (
+              <div
+                className="border-2 border-black flex justify-between m-4 bg-slate-100"
+                key={user._id}
+              >
+                <div className="pl-2">
+                  {user.firstName} {user.lastName} <br />
+                  {user.username}
+                </div>
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white p-1 px-4"
+                >
+                  Send
+                </button>
               </div>
-              <div>{user.username} </div>
-              <button type="button" className="bg-gray-500 text-white p-1 px-4">
-                Send
-              </button>
-            </div>
-          );
-        }) : <div>Loading.....</div>}
+            );
+          })
+        ) : (
+          <div>Loading.....</div>
+        )}
       </div>
     </>
   );
 }
-

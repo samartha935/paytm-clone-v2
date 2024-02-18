@@ -2,21 +2,6 @@
 
 15 February 2024 -
 
-{
-    "firstName": "virat",
-    "lastName": "kohli",
-    "email": "king@gamil.com",
-    "username": "king",
-    "password": "45639173673"
-}
-
-{
-    "firstName": "ms",
-    "lastName": "dhoni",
-    "email": "capcool@gamil.com",
-    "username": "capcool",
-    "password": "45639173673"
-}
 
 
 ## Backend todos

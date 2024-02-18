@@ -35,7 +35,7 @@ export function Balance(props) {
 
   return (
     <>
-      <div>
+      <div className="mx-10 my-4">
         <div className="font-bold">Your Balance : </div>
         <div>Rs {data ? data.balance : "loading....."}</div>
       </div>
