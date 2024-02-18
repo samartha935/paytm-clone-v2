@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 
 import { BottomWarning } from "../components/BottomWarning";
 import { Button } from "../components/Button";
@@ -68,6 +68,7 @@ export function Signup() {
                   password,
                 }
               );
+              localStorage.setItem("token", response.data.token);
             }}
           />
           <BottomWarning to={"/signin"} label={"Sign In"} />

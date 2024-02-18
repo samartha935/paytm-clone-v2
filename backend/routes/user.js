@@ -124,7 +124,9 @@ userRouter.put("/update", authMiddleware, async (req, res) => {
     res.status(403).json({});
   }
 });
-userRouter.get("/bulk", async (req, res) => {
+
+
+userRouter.get("/bulk", authMiddleware,  async (req, res) => {
   try {
     const list = await User.find({});
 
