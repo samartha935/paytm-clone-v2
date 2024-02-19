@@ -11,24 +11,24 @@ accountRouter.get("/balance", authMiddleware, async (req, res) => {
     const result = await Account.findOne({ userId: req.documentId });
 
     if (!result) {
-      res.json({
+      return res.status(404).json({
         msg: "Couldn't find the user's balance.",
       });
     }
 
-    res.json({
+    return res.json({
       balance: result.balance,
     });
   } catch (err) {
     console.log(err);
-    res.json({});
+    return res.status(404).json({});
   }
 });
 
 
 
 
-accountRouter.post("/transfer" , authMiddleware, async(req,res)=>{
+accountRouter.put("/transfer" , authMiddleware, async(req,res)=>{
     try{
         const session = await mongoose.startSession()
 
@@ -38,15 +38,15 @@ accountRouter.post("/transfer" , authMiddleware, async(req,res)=>{
         const account = await Account.findOne({userId : req.documentId}).session(session)
 
         if(!account){
-            res.status(400).json({
+            return res.status(404).json({
                 msg : "Error while finding your account details."
             })
         }
 
         if(account.balance < info.amount){
             await session.abortTransaction()
-            res.status(400).json({
-                message: "Insufficient balance"
+            return res.status(400).json({
+                msg: "Insufficient balance"
             })
         }
 
@@ -56,8 +56,8 @@ accountRouter.post("/transfer" , authMiddleware, async(req,res)=>{
 
         if(!toAccount){
             await session.abortTransaction()
-            res.status(400).json({
-                msg : "Invalid To account Information."
+            return res.status(422).json({
+                msg : "Invalid recipient account Information."
             })
         }
 
@@ -67,7 +67,7 @@ accountRouter.post("/transfer" , authMiddleware, async(req,res)=>{
 
         await session.commitTransaction()
 
-        res.json({
+        return res.json({
             msg : "Transaction Successful"
         })
 
@@ -75,7 +75,7 @@ accountRouter.post("/transfer" , authMiddleware, async(req,res)=>{
 
     }catch(err){
         console.log(err)
-        res.json({})
+        return res.status(404).json({})
     }
 })
 

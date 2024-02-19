@@ -7,7 +7,7 @@ function authMiddleware (req, res, next){
 
     
     if (! (authHeader && authHeader.startsWith('Bearer ')) ) {
-        res.status(403).json({
+        return res.status(403).json({
             msg : "You dont have the authorization."
         });
     }
@@ -21,7 +21,7 @@ function authMiddleware (req, res, next){
 
     } catch(err){
         console.log(err)
-        res.status(403).json({});
+        return res.status(403).json({});
     }
 
 }

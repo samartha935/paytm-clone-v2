@@ -17,7 +17,9 @@ export function Balance(props) {
               Authorization: "Bearer " + localStorage.getItem("token"),
             },
           }
-        );
+        ) .catch((err) => {
+          alert(err.response.data.msg);
+        });
         setData(response.data);
         console.log(response.data);
       } catch (err) {
@@ -27,7 +29,7 @@ export function Balance(props) {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, 7000);
+    const intervalId = setInterval(fetchData, 5000);
 
     return () => clearInterval(intervalId);
   }, []);

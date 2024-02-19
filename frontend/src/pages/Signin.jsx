@@ -6,10 +6,12 @@ import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
+import { useNavigate } from "react-router-dom";
 
 export function Signin() {
-  let [username, setUsername] = useState("");
-  let [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   return (
     <>
@@ -32,16 +34,20 @@ export function Signin() {
           <Button
             label={"Sign In"}
             onClick={async () => {
-              let response = await axios.post(
-                "http://localhost:3000/api/v1/user/signin",
-                {
+              let response = await axios
+                .post("http://localhost:3000/api/v1/user/signin", {
                   username,
                   password,
-                }
-              );
+                })
+                .catch((err) => {
+                  alert(err.response.data.msg);
+                });
               localStorage.setItem("token", response.data.token);
+              console.log(response.data.token)
+              navigate("/dashboard");
             }}
           />
+          <BottomWarning label={"First time here ?"} to={"/signup"} link={"Sign Up"} />
         </div>
       </div>
     </>

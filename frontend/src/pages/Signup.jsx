@@ -6,13 +6,16 @@ import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
-  let [firstName, setFirstName] = useState("");
-  let [lastName, setLastName] = useState("");
-  let [email, setEmail] = useState("");
-  let [username, setUsername] = useState("");
-  let [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+
 
   return (
     <>
@@ -58,20 +61,21 @@ export function Signup() {
           <Button
             label={"Sign Up"}
             onClick={async () => {
-              let response = await axios.post(
-                "http://localhost:3000/api/v1/user/signup",
-                {
+              let response = await axios.post("http://localhost:3000/api/v1/user/signup", {
                   firstName,
                   lastName,
                   email,
                   username,
                   password,
-                }
-              );
+                })
+                .catch((err) => {
+                  alert(err.response.data.msg);
+                });
               localStorage.setItem("token", response.data.token);
+              navigate("/dashboard")
             }}
           />
-          <BottomWarning to={"/signin"} label={"Sign In"} />
+          <BottomWarning label={"Already have an account? "} to={"/signin"} link={"Sign In"} />
         </div>
       </div>
     </>

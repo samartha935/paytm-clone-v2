@@ -18,7 +18,7 @@ userRouter.post("/signup", async (req, res) => {
     const parsedPayload = signUpSchema.safeParse(payload);
 
     if (!parsedPayload.success) {
-      res.status(411).json({
+      return res.status(411).json({
         msg: "You have entered wrong inputs.",
       });
     }
@@ -43,13 +43,13 @@ userRouter.post("/signup", async (req, res) => {
 
     const token = jwt.sign({ documentId }, JWT_SECRET);
 
-    res.json({
+    return res.json({
       msg: "User created successfully.",
       token: token,
     });
   } catch (err) {
     console.log(err);
-    res.status(403).json({});
+    return res.status(403).json({});
   }
 });
 
@@ -60,7 +60,7 @@ userRouter.post("/signin", async (req, res) => {
     const parsedPayload = signInSchema.safeParse(payload);
 
     if (!parsedPayload.success) {
-      res.status(411).json({
+      return res.status(411).json({
         msg: "You have entered wrong inputs.",
       });
     }
@@ -74,18 +74,18 @@ userRouter.post("/signin", async (req, res) => {
       const documentId = result._id;
       const token = jwt.sign({ documentId }, JWT_SECRET);
 
-      res.json({
+      return res.json({
         msg: "You have signed in.",
         token: token,
       });
     } else {
-      res.json({
-        msg: "Account dosent exists.",
+      return res.status(404).json({
+        msg: "Account dosen't exists.",
       });
     }
   } catch (err) {
     console.log(err);
-    res.status(403).json({});
+    return res.status(403).json({});
   }
 });
 
@@ -98,7 +98,7 @@ userRouter.put("/update", authMiddleware, async (req, res) => {
     const parsedPayload = updateInfoSchema.safeParse(payload);
 
     if (!parsedPayload.success) {
-      res.status(411).json({
+      return res.status(411).json({
         msg: "You have entered wrong inputs.",
       });
     }
@@ -111,17 +111,17 @@ userRouter.put("/update", authMiddleware, async (req, res) => {
     );
 
     if (update) {
-      res.json({
+      return res.json({
         msg: "Information updated sucessfully.",
       });
     } else {
-      req.json({
+      return res.json({
         msg: "Error occured while updating.",
       });
     }
   } catch (err) {
     console.log(err);
-    res.status(403).json({});
+    return res.status(403).json({});
   }
 });
 
@@ -131,7 +131,7 @@ userRouter.get("/bulk", authMiddleware,  async (req, res) => {
     const list = await User.find({});
 
     if (list) {
-      res.json({
+      return res.json({
         users: list.map((user) => ({
           firstName: user.firstName,
           lastName: user.lastName,
@@ -140,13 +140,13 @@ userRouter.get("/bulk", authMiddleware,  async (req, res) => {
         })),
       });
     }else{
-      res.json({
+      return res.status(404).json({
         msg : "There are no users."
       })
     }
   } catch (err) {
     console.log(err);
-    res.json({});
+    return res.status(404).json({});
   }
 });
 

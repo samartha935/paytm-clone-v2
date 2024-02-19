@@ -1,21 +1,25 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "./Button";
 
 export function User() {
   const [data, setData] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/v1/user/bulk",
-          {
+        const response = await axios
+          .get("http://localhost:3000/api/v1/user/bulk", {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + localStorage.getItem("token"),
             },
-          }
-        );
+          })
+          .catch((err) => {
+            alert(err.response.data.msg);
+          });
         setData(response.data);
         console.log(response.data);
       } catch (err) {
@@ -25,7 +29,7 @@ export function User() {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, 7000);
+    const intervalId = setInterval(fetchData, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -44,12 +48,19 @@ export function User() {
                   {user.firstName} {user.lastName} <br />
                   {user.username}
                 </div>
-                <button
+                {/* <button
                   type="button"
                   className="bg-gray-500 text-white p-1 px-4"
+                  onClick={()=>{
+                    navigate("/send")
+                  }}
                 >
                   Send
-                </button>
+                </button> */}
+                <Button onClick={()=>{
+                  const name = user.firstName + "-" + user.lastName
+                    navigate(`/send?id=${user._id}&name=${name}` )
+                  }} label="Send" to={user._id} />
               </div>
             );
           })
